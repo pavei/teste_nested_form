@@ -1,0 +1,65 @@
+<script>
+
+
+
+
+
+
+
+
+ $(document).ready(function() {
+window.NestedFormEvents.prototype.insertFields = function(content, assoc, link) {
+  var $tr = $(link).closest('tr');
+  return $(content).insertBefore($tr);
+}
+ });
+
+
+
+
+
+
+</script>
+
+
+<%=  nested_form_for (@project) do |f| %>
+  <% if @project.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@project.errors.count, "error") %> prohibited this project from being saved:</h2>
+
+      <ul>
+      <% @project.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+
+
+  <div class="field">
+    <%= f.label :nome %><br />
+    <%= f.text_field :nome %>
+  </div>
+
+<table>
+  <%= f.fields_for :tasks, @project.tasks.build, :wrapper => false do |task_form| %>
+    <tr class="fields">
+      <td>
+        <%= task_form.hidden_field :id %>
+        <%= task_form.text_field :name %>
+      </td>
+      <td><%= task_form.link_to_remove 'Remove' %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><%= f.link_to_add 'Add', :tasks %></td>
+  </tr>
+</table>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
